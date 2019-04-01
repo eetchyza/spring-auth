@@ -7,6 +7,9 @@ import java.util.Collections;
 import com.eetchyza.springauth.api.GrantedAuthority;
 import com.eetchyza.springauth.api.UserDetails;
 import com.eetchyza.springauth.api.UserDetailsService;
+import com.eetchyza.springauth.exceptions.NotAuthenticatedException;
+import com.eetchyza.springauth.exceptions.PasswordExpiredException;
+import com.eetchyza.springauth.exceptions.TokenExpiredException;
 import com.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,7 +66,53 @@ public class AuthServiceTest {
 		assertThat(authService.passwordsMatch("test-password", authService.hashAndSalt("bad-password"))).isFalse();
 	}
 
-	private UserDetails createUser(long id, String auth, String password, LocalDateTime expires) {
+	@Test
+	public void testSetCurrentUser() throws UsernameOrPasswordIncorrectException, PasswordExpiredException {
+		UserDetails user = createUser(6L, "STANDARD", authService.hashAndSalt("test-pass"), LocalDateTime.now().plusHours(3));
+		when(userDetailsService.loadUserByUsername(user.getUsername())).thenReturn(user);
+
+		Authentication auth = authService.login(user.getUsername(), "test-pass");
+
+		authService.setCurrentUser(auth.getAuthenticationToken());
+
+		assertThat(SecurityContext.getCurrentUser()).isEqualTo(user);
+	}
+
+	@Test(expected = PasswordExpiredException.class)
+	public void testSetCurrentUser_expiredUser() throws UsernameOrPasswordIncorrectException, PasswordExpiredException {
+		UserDetails user = createUser(6L, "STANDARD", authService.hashAndSalt("test-pass"), LocalDateTime.now().minusHours(5), true);
+		when(userDetailsService.loadUserByUsername(user.getUsername())).thenReturn(user);
+
+		Authentication auth = authService.login(user.getUsername(), "test-pass");
+
+		authService.setCurrentUser(auth.getAuthenticationToken());
+	}
+
+	@Test
+	public void testCheckAuthenticated() throws NotAuthenticatedException, TokenExpiredException, UsernameOrPasswordIncorrectException {
+		UserDetails user = createUser(6L, "STANDARD", authService.hashAndSalt("test-pass"), LocalDateTime.now().plusHours(3));
+		when(userDetailsService.loadUserByUsername(user.getUsername())).thenReturn(user);
+
+		Authentication auth = authService.login(user.getUsername(), "test-pass");
+
+		authService.checkAuthenticated(auth.getAuthenticationToken());
+
+		//If we get here we are authenticated
+	}
+
+	@Test(expected = NotAuthenticatedException.class)
+	public void testCheckAuthenticated_notAuthenticated() throws NotAuthenticatedException, TokenExpiredException {
+		UserDetails user = createUser(6L, "STANDARD", authService.hashAndSalt("test-pass"), LocalDateTime.now().plusHours(3));
+		when(userDetailsService.loadUserByUsername(user.getUsername())).thenReturn(user);
+
+		authService.checkAuthenticated("blabla");
+	}
+
+	private UserDetails createUser(long id, String auth, String password, LocalDateTime expires){
+		return createUser(id, auth, password, expires, false);
+	}
+
+	private UserDetails createUser(long id, String auth, String password, LocalDateTime expires, boolean isTemp) {
 		return new UserDetails() {
 			@Override
 			public long getId() {
@@ -87,7 +136,7 @@ public class AuthServiceTest {
 
 			@Override
 			public boolean isTemporaryPassword() {
-				return false;
+				return isTemp;
 			}
 
 			@Override
