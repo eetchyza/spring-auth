@@ -1,5 +1,13 @@
 package com.eetchyza.springauth;
 
+import java.lang.reflect.Method;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
 import com.eetchyza.springauth.annotations.AllowAnon;
 import com.eetchyza.springauth.annotations.AllowRoles;
 import com.eetchyza.springauth.api.UserDetails;
@@ -10,13 +18,17 @@ import com.eetchyza.springauth.exceptions.PasswordExpiredException;
 import com.eetchyza.springauth.exceptions.TokenExpiredException;
 import com.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException;
 import org.mindrot.jbcrypt.BCrypt;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
-import java.time.LocalDateTime;
-import java.util.*;
-
+/**
+ * A service for providing authentication and authorisation logic
+ *
+ * @author  Dan Williams
+ * @version 1.0.0
+ * @since   2019-04-04
+ */
 @Component
 public class AuthService {
 
