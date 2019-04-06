@@ -56,13 +56,13 @@ public class AuthServiceTest {
 	}
 
 	@Test
-	public void testPasswordsMatch_true(){
+	public void testPasswordsMatch_true() {
 		String password = "test-password";
 		assertThat(authService.passwordsMatch(password, authService.hashAndSalt(password))).isTrue();
 	}
 
 	@Test
-	public void testPasswordsMatch_false(){
+	public void testPasswordsMatch_false() {
 		assertThat(authService.passwordsMatch("test-password", authService.hashAndSalt("bad-password"))).isFalse();
 	}
 
@@ -108,7 +108,7 @@ public class AuthServiceTest {
 		authService.checkAuthenticated("blabla");
 	}
 
-	private UserDetails createUser(long id, String auth, String password, LocalDateTime expires){
+	private UserDetails createUser(long id, String auth, String password, LocalDateTime expires) {
 		return createUser(id, auth, password, expires, false);
 	}
 

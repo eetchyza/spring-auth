@@ -25,136 +25,183 @@ import org.springframework.stereotype.Component;
 /**
  * A service for providing authentication and authorisation logic
  *
- * @author  Dan Williams
+ * @author Dan Williams
  * @version 1.0.0
- * @since   2019-04-04
+ * @since 2019-04-04
  */
 @Component
 public class AuthService {
 
-    private final UserDetailsService userDetailsService;
-    private final Map<String, Authentication> authenticationMap;
-    private final Map<String, UserDetails> loggedInMap;
+	private final UserDetailsService userDetailsService;
 
-    @Autowired
-    public AuthService(UserDetailsService userDetailsService){
-        this.userDetailsService = userDetailsService;
-        this.authenticationMap = new HashMap<>();
-        this.loggedInMap = new HashMap<>();
-    }
+	private final Map<String, Authentication> authenticationMap;
 
-    public Authentication login(String username, String password) throws UsernameOrPasswordIncorrectException {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+	private final Map<String, UserDetails> loggedInMap;
 
-        if (userDetails == null || !passwordsMatch(password, userDetails.getPassword())){
-            throw new UsernameOrPasswordIncorrectException();
-        }
+	@Autowired
+	public AuthService(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+		this.authenticationMap = new HashMap<>();
+		this.loggedInMap = new HashMap<>();
+	}
 
-        Authentication authentication = new Authentication(generateToken(), generateToken(), LocalDateTime.now().plusHours(1), userDetails.getAuthorities(), username, userDetails.getId());
-        authenticationMap.put(authentication.getAuthenticationToken(), authentication);
-        loggedInMap.put(authentication.getAuthenticationToken(), userDetails);
+	/**
+	 * This method is used to retrieve a users details and validates the given password.
+	 * Once retrieved and validated an authentication object is created and stored for later authorization
+	 *
+	 * @param username Users username
+	 * @param password Users un-hashed password
+	 * @return {@link com.eetchyza.springauth.Authentication Authentication} Returns authentication details
+	 * @exception com.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException Exception thrown when username or password is incorrect
+	 * @see com.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException
+	 */
+	public Authentication login(String username, String password) throws UsernameOrPasswordIncorrectException {
+		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        return authentication;
-    }
+		if (userDetails == null || !passwordsMatch(password, userDetails.getPassword())) {
+			throw new UsernameOrPasswordIncorrectException();
+		}
 
-    public boolean passwordsMatch(String password, String hashedPassword){
-        return BCrypt.checkpw(password, hashedPassword);
-    }
+		Authentication authentication = new Authentication(generateToken(), generateToken(), LocalDateTime.now().plusHours(1), userDetails.getAuthorities(), username, userDetails.getId());
+		authenticationMap.put(authentication.getAuthenticationToken(), authentication);
+		loggedInMap.put(authentication.getAuthenticationToken(), userDetails);
 
-    public void logout(String token){
-        authenticationMap.remove(token);
-        loggedInMap.remove(token);
-    }
+		return authentication;
+	}
 
-    public void setCurrentUser(String token) throws PasswordExpiredException {
-        UserDetails userDetails = loggedInMap.get(token);
+	/**
+	 * This method is used to check is a plain text password matched a hashed password.
+	 *
+	 * @param password Plain text password
+	 * @param hashedPassword Hashed password
+	 * @return boolean Returns true if the hash and password match
+	 */
+	public boolean passwordsMatch(String password, String hashedPassword) {
+		return BCrypt.checkpw(password, hashedPassword);
+	}
 
-        if(userDetails != null && (userDetails.isTemporaryPassword() && userDetails.getExpires().isBefore(LocalDateTime.now()))){
-            throw new PasswordExpiredException();
-        }
+	/**
+	 * This method is used to remove a users authorization details from the store
+	 *
+	 * @param token A users auth token
+	 */
+	public void logout(String token) {
+		authenticationMap.remove(token);
+		loggedInMap.remove(token);
+	}
 
-        SecurityContext.setCurrentUser(userDetails);
-    }
+	/**
+	 * This method is used to add a stored user to the security context.
+	 *
+	 * @param token Users auth token
+	 * @exception com.eetchyza.springauth.exceptions.PasswordExpiredException  Exception thrown when users password has expired
+	 * @see com.eetchyza.springauth.exceptions.PasswordExpiredException
+	 */
+	public void setCurrentUser(String token) throws PasswordExpiredException {
+		UserDetails userDetails = loggedInMap.get(token);
 
-    public Authentication refresh(String token, String refreshToken){
-        Authentication authentication = authenticationMap.get(token);
-        Authentication newAuth = null;
+		if (userDetails != null && (userDetails.isTemporaryPassword() && userDetails.getExpires().isBefore(LocalDateTime.now()))) {
+			throw new PasswordExpiredException();
+		}
 
-        if(authentication.isRefreshToken(refreshToken)){
-            authenticationMap.remove(token);
-            UserDetails loggedInUser = loggedInMap.get(token);
+		SecurityContext.setCurrentUser(userDetails);
+	}
 
-            newAuth = new Authentication(generateToken(), generateToken(), LocalDateTime.now().plusHours(1), authentication.getRoles(), loggedInUser.getUsername(), loggedInUser.getId());
-            authenticationMap.put(newAuth.getAuthenticationToken(), newAuth);
-            loggedInMap.remove(token);
-            loggedInMap.put(newAuth.getAuthenticationToken(), loggedInUser);
-        }
+	/**
+	 * This method is used to regenerate a users stored authentication details
+	 *
+	 * @param token Users auth token
+	 * @param refreshToken Users refresh token
+	 * @return {@link com.eetchyza.springauth.Authentication Authentication} Returns authentication details
+	 */
+	public Authentication refresh(String token, String refreshToken) {
+		Authentication authentication = authenticationMap.get(token);
+		Authentication newAuth = null;
 
-        return newAuth;
-    }
+		if (authentication.isRefreshToken(refreshToken)) {
+			authenticationMap.remove(token);
+			UserDetails loggedInUser = loggedInMap.get(token);
 
-    public void checkAuthenticated(String token) throws NotAuthenticatedException, TokenExpiredException {
-        Authentication authentication = authenticationMap.get(token);
+			newAuth = new Authentication(generateToken(), generateToken(), LocalDateTime.now().plusHours(1), authentication.getRoles(), loggedInUser.getUsername(), loggedInUser.getId());
+			authenticationMap.put(newAuth.getAuthenticationToken(), newAuth);
+			loggedInMap.remove(token);
+			loggedInMap.put(newAuth.getAuthenticationToken(), loggedInUser);
+		}
 
-        if(authentication == null){
-            throw new NotAuthenticatedException();
-        }
+		return newAuth;
+	}
 
-        if(authentication.isExpired()){
-            throw new TokenExpiredException();
-        }
-    }
+	/**
+	 * This method is used to check if a user is authenticated
+	 *
+	 * @param token Users auth token
+	 * @exception com.eetchyza.springauth.exceptions.NotAuthenticatedException Exception thrown when there is no stored authentication details
+	 * @exception com.eetchyza.springauth.exceptions.TokenExpiredException Exception thrown when the auth has expired
+	 * @see com.eetchyza.springauth.exceptions.NotAuthenticatedException
+	 * @see com.eetchyza.springauth.exceptions.TokenExpiredException
+	 */
+	public void checkAuthenticated(String token) throws NotAuthenticatedException, TokenExpiredException {
+		Authentication authentication = authenticationMap.get(token);
 
-    public void checkIsAuthorised(String token, Method method) throws NotAuthorisedException {
-        Authentication authentication = authenticationMap.get(token);
+		if (authentication == null) {
+			throw new NotAuthenticatedException();
+		}
 
-        if(!method.isAnnotationPresent(AllowAnon.class) && !authentication.hasRoles(method.getAnnotation(AllowRoles.class).value())){
-            throw new NotAuthorisedException();
-        }
-    }
+		if (authentication.isExpired()) {
+			throw new TokenExpiredException();
+		}
+	}
 
-    public String hashAndSalt(String password){
-        return BCrypt.hashpw(password, BCrypt.gensalt());
-    }
+	public void checkIsAuthorised(String token, Method method) throws NotAuthorisedException {
+		Authentication authentication = authenticationMap.get(token);
 
-    public String generateToken(){
-        int length = 20;
+		if (!method.isAnnotationPresent(AllowAnon.class) && !authentication.hasRoles(method.getAnnotation(AllowRoles.class).value())) {
+			throw new NotAuthorisedException();
+		}
+	}
 
-        String[] characterGroups = new String[4];
-        characterGroups[0]=("abcdefghjkmnpqrstuvwxyz");
-        characterGroups[1]=("ABCDEFGHJKMNPQRSTWUVXYZ");
-        characterGroups[2]=("23456789");
-        characterGroups[3]=("!-+#");
+	public String hashAndSalt(String password) {
+		return BCrypt.hashpw(password, BCrypt.gensalt());
+	}
 
-        Random rng = new Random();
+	public String generateToken() {
+		int length = 20;
 
-        List<String> chars = new ArrayList<>();
-        for(String characters : characterGroups){
-            char[] text = new char[length];
-            for (int i = 0; i < length; i++) {
-                text[i] = characters.charAt(rng.nextInt(characters.length()));
-            }
+		String[] characterGroups = new String[4];
+		characterGroups[0] = ("abcdefghjkmnpqrstuvwxyz");
+		characterGroups[1] = ("ABCDEFGHJKMNPQRSTWUVXYZ");
+		characterGroups[2] = ("23456789");
+		characterGroups[3] = ("!-+#");
 
-            chars.add((new String(text)));
-        }
+		Random rng = new Random();
 
-        StringBuilder characters = new StringBuilder();
+		List<String> chars = new ArrayList<>();
+		for (String characters : characterGroups) {
+			char[] text = new char[length];
+			for (int i = 0; i < length; i++) {
+				text[i] = characters.charAt(rng.nextInt(characters.length()));
+			}
 
-        for(String character : chars){
-            characters.append(character);
-        }
+			chars.add((new String(text)));
+		}
 
-        char[] text = new char[length];
-        for (int i = 0; i < length; i++) {
-            text[i] = characters.charAt(rng.nextInt(characters.length()));
-        }
+		StringBuilder characters = new StringBuilder();
 
-        String generated = new String(text);
+		for (String character : chars) {
+			characters.append(character);
+		}
 
-        if(authenticationMap.containsKey(generated)){
-            generated = generateToken();
-        }
+		char[] text = new char[length];
+		for (int i = 0; i < length; i++) {
+			text[i] = characters.charAt(rng.nextInt(characters.length()));
+		}
 
-        return generated;
-    }
+		String generated = new String(text);
+
+		if (authenticationMap.containsKey(generated)) {
+			generated = generateToken();
+		}
+
+		return generated;
+	}
 }

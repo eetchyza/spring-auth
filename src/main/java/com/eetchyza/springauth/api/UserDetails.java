@@ -6,15 +6,15 @@ import java.util.Collection;
 
 public interface UserDetails extends Serializable {
 
-    long getId();
+	long getId();
 
-    Collection<? extends GrantedAuthority> getAuthorities();
+	Collection<? extends GrantedAuthority> getAuthorities();
 
-    String getPassword();
+	String getPassword();
 
-    String getUsername();
+	String getUsername();
 
-    boolean isTemporaryPassword();
+	boolean isTemporaryPassword();
 
-    LocalDateTime getExpires();
+	LocalDateTime getExpires();
 }
