@@ -2,29 +2,29 @@
 
 about project
 
-# Motivation
+## Motivation
 
 why I did this
 
-# Build Status
+## Build Status
 [![Build Status](<travis link>)](<travis link>)
 
-# Getting Started
+## Getting Started
 
 set up instructions
 
-# API Reference
+## API Reference
 
 link to java doc
 
-# Contribute
+## Contribute
 
 link to contributions guide and code of conduct
 
-# Need help?
+## Need help?
 
 link to chat channel
 
-# License
+## License
 
 MIT © Eetchyza
