@@ -130,6 +130,45 @@ At this point your spring boot application should be all set up with spring auth
   * **Code:** 200 <br />
     **Content:** `{ authenticationToken : 2-$=1#2421, refreshToken : ~'huZZ68, roles : [ 'STANDARD' ], username : Bob, id : 4, expire : '2019-03-13:17:35:00' }`
     
+    **Logout**
+----
+  Destorys a users token and returns no content.
+
+* **URL**
+
+  /security/logout
+
+* **Method:**
+
+  `GET`
+
+* **Success Response:**
+
+  * **Code:** 204 <br />
+    
+**Refresh**
+----
+  Regenerates tokens for a user and returns authentication data for a single user as json.
+
+* **URL**
+
+  /security/refresh
+
+* **Method:**
+
+  `POST`
+
+* **Data Params**
+
+  **Required:**
+ 
+   `token=[string]`
+   `refreshToken=[string]`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{ authenticationToken : 2-$=1#2421, refreshToken : ~'huZZ68, roles : [ 'STANDARD' ], username : Bob, id : 4, expire : '2019-03-13:17:35:00' }`
 
 ## Contribute
 
