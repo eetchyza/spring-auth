@@ -102,6 +102,17 @@ public class UserQueryService implements UserDetailsService {
 
 At this point your spring boot application should be all set up with spring auth and ready to go.
 
+## Usage
+
+Once integrated into your spring boot project it should be pretty straight forward to use.
+All endpoints will automatically return 403 unless annotated with either `@AllowAnon` or `@AllowRoles`, the first simply lets the request continue without authorising while the second will only allow requests from users with `GrantedAuthorities`  that have names matching the provided strings.
+
+For all requests there should be a 'TOKEN' header set with a valid authentication token or the requests will be rejected.
+These tokens can be retrived and refreshed (as they expire) with the [below](https://github.com/Williams-Dan/spring-auth/#login) endpoints.
+
+**NOTE:** When saving a user the password needs to be hashed and salted with `AuthService#hashAndSalt`
+
+
 ## API Reference
 
 [Java Doc](https://eetchyza.co.uk/spring-auth/1.0.0/)
