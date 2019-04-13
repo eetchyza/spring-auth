@@ -106,6 +106,31 @@ At this point your spring boot application should be all set up with spring auth
 
 [Java Doc](https://eetchyza.co.uk/spring-auth/1.0.0/)
 
+**Login**
+----
+  Authenticates a user and returns authentication data for a single user as json.
+
+* **URL**
+
+  /security/login
+
+* **Method:**
+
+  `POST`
+
+* **Data Params**
+
+  **Required:**
+ 
+   `username=[string]`
+   `password=[string]`
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** `{ authenticationToken : 2-$=1#2421, refreshToken : ~'huZZ68, roles : [ 'STANDARD' ], username : Bob, id : 4, expire : '2019-03-13:17:35:00' }`
+    
+
 ## Contribute
 
 If you would be interested in contributing to this project, you can find out how by first reading our [Code of conduct](https://github.com/eetchyza/.github/blob/master/CODE_OF_CONDUCT.md) and our [Contributing guide lines](https://github.com/eetchyza/.github/blob/master/CONTRIBUTING.md)
