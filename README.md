@@ -11,7 +11,80 @@ why I did this
 
 ## Getting Started
 
-set up instructions
+Import the library into your spring boot project via maven:
+
+``` xml
+TBC
+
+```
+Then you will need to make sure your spring boot application scans for 'com.eetchyza.springauth'
+
+``` java
+@SpringBootApplication(scanBasePackages = {"com.eetchyza.demo", "com.eetchyza.springauth"})
+public class Application {
+
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+	}
+}
+
+```
+Include this bean in your java configs
+
+``` java
+    @Bean
+    public SecurityFilter securityFilter(){
+        return new SecurityFilter();
+    }
+
+```
+
+Next there are two interfaces you will need to implement both of these should then be mapped to your data store and domain objects
+
+``` java
+
+@Entity
+public class Authority implements GrantedAuthority {
+
+    @Column
+    private String name;
+
+    public Authority() {
+
+    }
+
+    public Authority(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getAuthority() {
+        return name;
+    }
+}
+
+@Entity
+public class User implements UserDetails {
+    @Column(unique = true)
+    private String username;
+    @Column
+    private String password;
+    @Column(unique = true)
+    private String emailAddress;
+    @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Authority> authorities;
+    @Column
+    private boolean temporaryPassword;
+    @Column
+    private LocalDateTime expires;
+    
+    ...
+
+```
+
 
 ## API Reference
 
