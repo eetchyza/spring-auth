@@ -1,10 +1,7 @@
 # Spring Auth
 
-about project
+This is a very simple library for providing a spring boot application with OAuth2 type authentication, while taking a lot of influence from spring security it is not meant as a spring security replacement but rather a light weight alternative
 
-## Motivation
-
-why I did this
 
 ## Build Status
 [![Build Status](<travis link>)](<travis link>)
