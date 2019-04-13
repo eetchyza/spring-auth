@@ -85,6 +85,22 @@ public class User implements UserDetails {
 
 ```
 
+Finally the library needs to be able to access users from your data store, to do this you will need implement the user details service and mark it with @Service to make sure spring picks it up.
+
+``` java 
+
+@Service
+public class UserQueryService implements UserDetailsService {
+
+    @Override
+    public User loadUserByUsername(String username){
+        // Fetch user from data store in here
+    }
+}
+
+```
+
+At this point your spring boot application should be all set up with spring auth and ready to go.
 
 ## API Reference
 
