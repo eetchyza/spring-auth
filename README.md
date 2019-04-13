@@ -15,7 +15,7 @@ set up instructions
 
 ## API Reference
 
-link to java doc
+[Java Doc](https://eetchyza.co.uk/spring-auth/1.0.0/)
 
 ## Contribute
 
