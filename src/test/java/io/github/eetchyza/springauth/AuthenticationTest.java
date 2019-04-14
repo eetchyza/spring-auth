@@ -1,10 +1,10 @@
-package com.eetchyza.springauth;
+package io.github.eetchyza.springauth;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.eetchyza.springauth.api.GrantedAuthority;
+import io.github.eetchyza.springauth.api.GrantedAuthority;
 import org.junit.Before;
 import org.junit.Test;
 

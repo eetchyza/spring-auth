@@ -1,4 +1,4 @@
-package com.eetchyza.springauth.api;
+package io.github.eetchyza.springauth.api;
 
 import java.io.Serializable;
 

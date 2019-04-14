@@ -1,13 +1,13 @@
-package com.eetchyza.springauth.web;
+package io.github.eetchyza.springauth.web;
 
-import com.eetchyza.springauth.AuthService;
-import com.eetchyza.springauth.SecurityContext;
-import com.eetchyza.springauth.annotations.AllowAnon;
-import com.eetchyza.springauth.api.UserDetails;
-import com.eetchyza.springauth.exceptions.NotAuthenticatedException;
-import com.eetchyza.springauth.exceptions.NotAuthorisedException;
-import com.eetchyza.springauth.exceptions.PasswordExpiredException;
-import com.eetchyza.springauth.exceptions.TokenExpiredException;
+import io.github.eetchyza.springauth.AuthService;
+import io.github.eetchyza.springauth.SecurityContext;
+import io.github.eetchyza.springauth.annotations.AllowAnon;
+import io.github.eetchyza.springauth.api.UserDetails;
+import io.github.eetchyza.springauth.exceptions.NotAuthenticatedException;
+import io.github.eetchyza.springauth.exceptions.NotAuthorisedException;
+import io.github.eetchyza.springauth.exceptions.PasswordExpiredException;
+import io.github.eetchyza.springauth.exceptions.TokenExpiredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

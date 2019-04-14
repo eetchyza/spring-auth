@@ -1,4 +1,4 @@
-package com.eetchyza.springauth.web.dto;
+package io.github.eetchyza.springauth.web.dto;
 
 public class RefreshDto {
     private String token;

@@ -1,16 +1,16 @@
-package com.eetchyza.springauth;
+package io.github.eetchyza.springauth;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.eetchyza.springauth.api.GrantedAuthority;
-import com.eetchyza.springauth.api.UserDetails;
-import com.eetchyza.springauth.api.UserDetailsService;
-import com.eetchyza.springauth.exceptions.NotAuthenticatedException;
-import com.eetchyza.springauth.exceptions.PasswordExpiredException;
-import com.eetchyza.springauth.exceptions.TokenExpiredException;
-import com.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException;
+import io.github.eetchyza.springauth.api.GrantedAuthority;
+import io.github.eetchyza.springauth.api.UserDetails;
+import io.github.eetchyza.springauth.api.UserDetailsService;
+import io.github.eetchyza.springauth.exceptions.NotAuthenticatedException;
+import io.github.eetchyza.springauth.exceptions.PasswordExpiredException;
+import io.github.eetchyza.springauth.exceptions.TokenExpiredException;
+import io.github.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException;
 import org.junit.Before;
 import org.junit.Test;
 

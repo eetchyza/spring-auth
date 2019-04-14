@@ -1,6 +1,6 @@
-package com.eetchyza.springauth;
+package io.github.eetchyza.springauth;
 
-import com.eetchyza.springauth.api.UserDetails;
+import io.github.eetchyza.springauth.api.UserDetails;
 
 /**
  * A thread safe Security Context used to track the current logged in users.
@@ -19,7 +19,7 @@ public class SecurityContext {
 	/**
 	 * This method is used to get the current user
 	 *
-	 * @return {@link com.eetchyza.springauth.api.UserDetails UserDetails} This returns the current user associated with the current thread.
+	 * @return {@link UserDetails UserDetails} This returns the current user associated with the current thread.
 	 */
 	public static synchronized UserDetails getCurrentUser() {
 		return user.get();
@@ -28,7 +28,7 @@ public class SecurityContext {
 	/**
 	 * This adds a user to the security context for this thread
 	 *
-	 * @param userDetails {@link com.eetchyza.springauth.api.UserDetails UserDetails} User to be set.
+	 * @param userDetails {@link UserDetails UserDetails} User to be set.
 	 */
 	public static synchronized void setCurrentUser(UserDetails userDetails) {
 		user.set(userDetails);

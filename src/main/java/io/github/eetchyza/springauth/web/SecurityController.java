@@ -1,11 +1,11 @@
-package com.eetchyza.springauth.web;
+package io.github.eetchyza.springauth.web;
 
-import com.eetchyza.springauth.AuthService;
-import com.eetchyza.springauth.Authentication;
-import com.eetchyza.springauth.annotations.AllowAnon;
-import com.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException;
-import com.eetchyza.springauth.web.dto.LoginDto;
-import com.eetchyza.springauth.web.dto.RefreshDto;
+import io.github.eetchyza.springauth.AuthService;
+import io.github.eetchyza.springauth.Authentication;
+import io.github.eetchyza.springauth.annotations.AllowAnon;
+import io.github.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException;
+import io.github.eetchyza.springauth.web.dto.LoginDto;
+import io.github.eetchyza.springauth.web.dto.RefreshDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,8 @@ public class SecurityController {
 
     @PostMapping("/login")
     @AllowAnon
-    public @ResponseBody Authentication login(@RequestBody LoginDto loginDto) throws UsernameOrPasswordIncorrectException {
+    public @ResponseBody
+    Authentication login(@RequestBody LoginDto loginDto) throws UsernameOrPasswordIncorrectException {
         return authService.login(loginDto.getUsername(), loginDto.getPassword());
     }
 

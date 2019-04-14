@@ -1,4 +1,4 @@
-package com.eetchyza.springauth;
+package io.github.eetchyza.springauth;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.eetchyza.springauth.annotations.AllowAnon;
-import com.eetchyza.springauth.annotations.AllowRoles;
-import com.eetchyza.springauth.api.UserDetails;
-import com.eetchyza.springauth.api.UserDetailsService;
-import com.eetchyza.springauth.exceptions.NotAuthenticatedException;
-import com.eetchyza.springauth.exceptions.NotAuthorisedException;
-import com.eetchyza.springauth.exceptions.PasswordExpiredException;
-import com.eetchyza.springauth.exceptions.TokenExpiredException;
-import com.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException;
+import io.github.eetchyza.springauth.annotations.AllowAnon;
+import io.github.eetchyza.springauth.annotations.AllowRoles;
+import io.github.eetchyza.springauth.api.UserDetails;
+import io.github.eetchyza.springauth.api.UserDetailsService;
+import io.github.eetchyza.springauth.exceptions.NotAuthenticatedException;
+import io.github.eetchyza.springauth.exceptions.NotAuthorisedException;
+import io.github.eetchyza.springauth.exceptions.PasswordExpiredException;
+import io.github.eetchyza.springauth.exceptions.TokenExpiredException;
+import io.github.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException;
 import org.mindrot.jbcrypt.BCrypt;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +51,9 @@ public class AuthService {
 	 *
 	 * @param username Users username
 	 * @param password Users un-hashed password
-	 * @return {@link com.eetchyza.springauth.Authentication Authentication} Returns authentication details
-	 * @exception com.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException Exception thrown when username or password is incorrect
-	 * @see com.eetchyza.springauth.exceptions.UsernameOrPasswordIncorrectException
+	 * @return {@link Authentication Authentication} Returns authentication details
+	 * @exception UsernameOrPasswordIncorrectException Exception thrown when username or password is incorrect
+	 * @see UsernameOrPasswordIncorrectException
 	 */
 	public Authentication login(String username, String password) throws UsernameOrPasswordIncorrectException {
 		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -94,8 +94,8 @@ public class AuthService {
 	 * This method is used to add a stored user to the security context.
 	 *
 	 * @param token Users auth token
-	 * @exception com.eetchyza.springauth.exceptions.PasswordExpiredException  Exception thrown when users password has expired
-	 * @see com.eetchyza.springauth.exceptions.PasswordExpiredException
+	 * @exception PasswordExpiredException  Exception thrown when users password has expired
+	 * @see PasswordExpiredException
 	 */
 	public void setCurrentUser(String token) throws PasswordExpiredException {
 		UserDetails userDetails = loggedInMap.get(token);
@@ -112,7 +112,7 @@ public class AuthService {
 	 *
 	 * @param token Users auth token
 	 * @param refreshToken Users refresh token
-	 * @return {@link com.eetchyza.springauth.Authentication Authentication} Returns authentication details
+	 * @return {@link Authentication Authentication} Returns authentication details
 	 */
 	public Authentication refresh(String token, String refreshToken) {
 		Authentication authentication = authenticationMap.get(token);
@@ -135,10 +135,10 @@ public class AuthService {
 	 * This method is used to check if a user is authenticated
 	 *
 	 * @param token Users auth token
-	 * @exception com.eetchyza.springauth.exceptions.NotAuthenticatedException Exception thrown when there is no stored authentication details
-	 * @exception com.eetchyza.springauth.exceptions.TokenExpiredException Exception thrown when the auth has expired
-	 * @see com.eetchyza.springauth.exceptions.NotAuthenticatedException
-	 * @see com.eetchyza.springauth.exceptions.TokenExpiredException
+	 * @exception NotAuthenticatedException Exception thrown when there is no stored authentication details
+	 * @exception TokenExpiredException Exception thrown when the auth has expired
+	 * @see NotAuthenticatedException
+	 * @see TokenExpiredException
 	 */
 	public void checkAuthenticated(String token) throws NotAuthenticatedException, TokenExpiredException {
 		Authentication authentication = authenticationMap.get(token);

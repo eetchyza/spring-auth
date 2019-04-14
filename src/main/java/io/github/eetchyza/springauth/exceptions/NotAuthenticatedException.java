@@ -1,4 +1,4 @@
-package com.eetchyza.springauth.exceptions;
+package io.github.eetchyza.springauth.exceptions;
 
 /**
  * NotAuthenticatedException

@@ -1,9 +1,9 @@
-package com.eetchyza.springauth;
+package io.github.eetchyza.springauth;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-import com.eetchyza.springauth.api.GrantedAuthority;
+import io.github.eetchyza.springauth.api.GrantedAuthority;
 
 /**
  * Holds authentication details
