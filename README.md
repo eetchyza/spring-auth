@@ -17,7 +17,7 @@ TBC
 Then you will need to make sure your spring boot application scans for 'com.eetchyza.springauth'
 
 ``` java
-@SpringBootApplication(scanBasePackages = {"com.eetchyza.demo", "com.eetchyza.springauth"})
+@SpringBootApplication(scanBasePackages = {"com.eetchyza.demo", "io.github.eetchyza.springauth"})
 public class Application {
 
 	public static void main(String[] args) {
