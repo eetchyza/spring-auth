@@ -185,7 +185,7 @@ If you would be interested in contributing to this project, you can find out how
 
 ## Need help?
 
-link to chat channel
+Join our [slack](https://eetchyzaworkspace.slack.com) and feel free to ask questions (email daniel@chat.za.net for an invite)
 
 ## License
 
