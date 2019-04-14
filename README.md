@@ -4,7 +4,7 @@ This is a very simple library for providing a spring boot application with OAuth
 
 
 ## Build Status
-[![Build Status](<travis link>)](<travis link>)
+[![Build Status](https://travis-ci.org/eetchyza/spring-auth.svg?branch=master)](https://travis-ci.org/eetchyza/spring-auth)
 
 ## Getting Started
 
