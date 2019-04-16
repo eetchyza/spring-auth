@@ -7,6 +7,7 @@
     <version>1.0.16-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <name>spring-auth</name>
     <description>
         This is a very simple library for providing a spring boot application with OAuth2 type authentication,
         while taking a lot of influence from spring security it is not meant as a spring security replacement but rather
@@ -144,8 +145,6 @@
             <id>release</id>
             <build>
                 <plugins>
-
-
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
