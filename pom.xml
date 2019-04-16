@@ -4,7 +4,7 @@
 
     <groupId>io.github.eetchyza</groupId>
     <artifactId>springauth</artifactId>
-    <version>1.0.14-SNAPSHOT</version>
+    <version>1.0.14</version>
     <packaging>jar</packaging>
 
     <description>
@@ -24,7 +24,7 @@
         <connection>scm:git:https://github.com/eetchyza/spring-auth.git</connection>
         <url>https://github.com/eetchyza/spring-auth</url>
         <developerConnection>scm:git:https://github.com/eetchyza/spring-auth.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>springauth-1.0.14</tag>
     </scm>
     <distributionManagement>
         <snapshotRepository>
