@@ -19,6 +19,12 @@
             <url>https://opensource.org/licenses/MIT</url>
         </license>
     </licenses>
+    <developers>
+        <developer>
+            <name>Dan Williams</name>
+            <email>daniel@chat.za.net</email>
+        </developer>
+    </developers>
 
     <scm>
         <connection>scm:git:https://github.com/eetchyza/spring-auth.git</connection>
