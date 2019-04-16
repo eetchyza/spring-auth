@@ -11,7 +11,12 @@ This is a very simple library for providing a spring boot application with OAuth
 Import the library into your spring boot project via maven:
 
 ``` xml
-TBC
+
+<dependency>
+  <groupId>io.github.eetchyza</groupId>
+  <artifactId>springauth</artifactId>
+  <version>1.0.16</version>
+</dependency>
 
 ```
 Then you will need to make sure your spring boot application scans for 'com.eetchyza.springauth'
